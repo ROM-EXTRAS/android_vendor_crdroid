@@ -382,10 +382,8 @@ MODULES_INTERMEDIATES := $(KERNEL_BUILD_OUT_PREFIX)$(call intermediates-dir-for,
 KERNEL_VENDOR_RAMDISK_DEPMOD_STAGING_DIR := $(KERNEL_BUILD_OUT_PREFIX)$(call intermediates-dir-for,PACKAGING,depmod_vendor_ramdisk)
 $(INTERNAL_VENDOR_RAMDISK_TARGET): $(TARGET_PREBUILT_INT_KERNEL)
 
-$(KERNEL_OUT):
+$(KERNEL_ADDITIONAL_CONFIG_OUT): $(KERNEL_ADDITIONAL_CONFIG_DEPENDENCY)
 	mkdir -p $(KERNEL_OUT)
-
-$(KERNEL_ADDITIONAL_CONFIG_OUT): $(KERNEL_OUT)
 	$(hide) cmp -s $(KERNEL_ADDITIONAL_CONFIG_SRC) $@ || cp $(KERNEL_ADDITIONAL_CONFIG_SRC) $@;
 
 $(KERNEL_CONFIG): $(KERNEL_DEFCONFIG_SRC) $(KERNEL_ADDITIONAL_CONFIG_OUT)
@@ -427,13 +425,15 @@ kerneltags: $(KERNEL_CONFIG)
 
 .PHONY: kernelsavedefconfig alldefconfig
 
-kernelsavedefconfig: $(KERNEL_OUT)
+kernelsavedefconfig:
+	mkdir -p $(KERNEL_OUT)
 	$(call make-kernel-target,$(KERNEL_DEFCONFIG))
 	env KCONFIG_NOTIMESTAMP=true \
 		 $(call make-kernel-target,savedefconfig)
 	cp $(KERNEL_OUT)/defconfig $(KERNEL_DEFCONFIG_SRC)
 
-alldefconfig: $(KERNEL_OUT)
+alldefconfig:
+	mkdir -p $(KERNEL_OUT)
 	env KCONFIG_NOTIMESTAMP=true \
 		 $(call make-kernel-target,alldefconfig)
 
