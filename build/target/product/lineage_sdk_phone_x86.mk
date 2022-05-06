@@ -19,6 +19,13 @@ include vendor/lineage/build/target/product/lineage_generic_target.mk
 # Enable mainline checking
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := relaxed
 
+PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
+    system/addon.d/70-velvet.sh \
+    system/app/FlipendoPrebuilt/FlipendoPrebuilt.apk
+
 # Overrides
 PRODUCT_NAME := lineage_sdk_phone_x86
 PRODUCT_MODEL := LineageOS Android SDK built for x86
+
+PRODUCT_SDK_ADDON_NAME := lineage
+PRODUCT_SDK_ADDON_SYS_IMG_SOURCE_PROP := $(LOCAL_PATH)/source.properties
